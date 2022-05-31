@@ -121,25 +121,46 @@ def recommend_portfolio(intent_request):
     first_name = get_slots(intent_request)["firstName"]
     
     age = get_slots(intent_request)["age"]
-    if age < 0:
-        return recommend_portfolio(
+    age = float(age)
+    if age is not None:
+        if age <= 0 or age >= 65:
+            return build_validation_result(
             False,
-            "age",
-            "Your age should be greater than zero but no older than 65 to use this service, "
+            age,
+            "You should be older than zero but no older than 65 to use this service, "
             "please provide a different age.",
             )
     
     investment_amount = get_slots(intent_request)["investmentAmount"]
-    if investment_amount < 5000:
-            return recommend_portfolio(
+    investment_amount = float(investment_amount)
+    if investment_amount is not None:
+        if investment_amount < 5000:
+            return build_validation_result(
                 False,
-                "dollars",
-                "The amount of the investment should be greater than or equal to 5000, "
+                investment_amount,
+                "Minimum amount of the investment should be 5000, "
                 "please provide a correct amount of dollars.",
             )
     
     risk_level = get_slots(intent_request)["riskLevel"]
     source = intent_request["invocationSource"]
+    
+### Once the intent is fulfilled, the bot should respond with an investment recommendation based on the selected risk level as follows:###
+
+    return build_validation_result(True, None, None)
+    
+    if("risklevel"=="none"):
+        print("100% bonds (AGG), 0% equities (SPY)")
+    elif("risklevel"=="low"):
+        print("60% bonds (AGG), 40% equities (SPY)")
+    elif("risklevel"=="medium"):
+        print("40% bonds (AGG), 60% equities (SPY)")
+    elif("risklevel"=="high"):
+        print("20% bonds (AGG), 80% equities (SPY)")
+    else:
+        print("Specify risk level correctly None/Low/Medium/High")
+
+    
 
 ### Intents Dispatcher ###
 def dispatch(intent_request):
