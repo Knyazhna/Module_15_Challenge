@@ -119,13 +119,27 @@ def recommend_portfolio(intent_request):
     """
 
     first_name = get_slots(intent_request)["firstName"]
+    
     age = get_slots(intent_request)["age"]
+    if age < 0:
+        return recommend_portfolio(
+            False,
+            "age",
+            "Your age should be greater than zero but no older than 65 to use this service, "
+            "please provide a different age.",
+            )
+    
     investment_amount = get_slots(intent_request)["investmentAmount"]
+    if investment_amount < 5000:
+            return recommend_portfolio(
+                False,
+                "dollars",
+                "The amount of the investment should be greater than or equal to 5000, "
+                "please provide a correct amount of dollars.",
+            )
+    
     risk_level = get_slots(intent_request)["riskLevel"]
     source = intent_request["invocationSource"]
-
-    # YOUR CODE GOES HERE!
-
 
 ### Intents Dispatcher ###
 def dispatch(intent_request):
