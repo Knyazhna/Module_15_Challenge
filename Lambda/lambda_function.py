@@ -119,32 +119,27 @@ def recommend_portfolio(intent_request):
     """
 
     first_name = get_slots(intent_request)["firstName"]
-    
     age = get_slots(intent_request)["age"]
+    risk_level = get_slots(intent_request)["riskLevel"]
+    source = intent_request["invocationSource"]
+    
     age = float(age)
     if age is not None:
-        if age <= 0 or age >= 65:
+        if age <=0 or age >= 65:
             return build_validation_result(
-            False,
-            age,
-            "You should be older than zero but no older than 65 to use this service, "
-            "please provide a different age.",
-            )
-    
-    investment_amount = get_slots(intent_request)["investmentAmount"]
+                False, 
+                age,
+                "you need to be older than 0 and less than 65 to use this service."
+                )
+    #validate the investment amount it should be greater than >= 5000
     investment_amount = float(investment_amount)
     if investment_amount is not None:
         if investment_amount < 5000:
             return build_validation_result(
                 False,
                 investment_amount,
-                "Minimum amount of the investment should be 5000, "
-                "please provide a correct amount of dollars.",
-            )
-    
-    risk_level = get_slots(intent_request)["riskLevel"]
-    source = intent_request["invocationSource"]
-    
+                "You need to invest minimum amount of $5000 or more"
+                )
 ### Once the intent is fulfilled, the bot should respond with an investment recommendation based on the selected risk level as follows:###
 
     return build_validation_result(True, None, None)
